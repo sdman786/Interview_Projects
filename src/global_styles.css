@@ -14,9 +14,8 @@
 
 .winLoseText {
   display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .winLoseText h4 {
