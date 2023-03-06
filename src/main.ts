@@ -40,7 +40,6 @@ export class CrapsGame {
   protected rollResult: number;
   protected dice1: number;
   protected dice2: number;
-  protected diceRollSequence: boolean = false;
 
   showRules(templateRef) {
     this.dialog.open(templateRef, {
@@ -63,8 +62,6 @@ export class CrapsGame {
     console.log('Dice Roll Count: ', this.diceRolls);
     this.rollResult += this.dice1 + this.dice2;
 
-    this.diceRollSequence = true;
-    
     this.handleDiceRoll();
   }
 

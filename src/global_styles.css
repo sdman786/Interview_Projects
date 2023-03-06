@@ -8,8 +8,23 @@
   margin-left: 15vw;
   margin-top: 5vw;
   flex-direction: column;
-  align-items: center;  
+  align-items: center;
   text-align: center;
+}
+
+.winLoseText {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+
+.winLoseText h4 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: nowrap;
+  margin: 0em 0.5em;
 }
 
 .userInput {
@@ -43,4 +58,8 @@
   margin-bottom: 1em;
 }
 
+.rollAction button:hover {
+  transition: 1s ease-in-out;
 
+  rotate: 1.5turn;
+}

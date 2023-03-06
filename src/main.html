@@ -4,6 +4,23 @@
     <h2>
       <mat-icon>casino</mat-icon> My Craps Game <mat-icon>casino</mat-icon>
     </h2>
+    <div class="winLoseText" *ngIf="!showStats">
+      <h4 style="color: green">
+        Winning Rolls:
+        <p *ngFor="let roll of winningRolls; let i = index">
+          <span *ngIf="i == 0">[ </span>
+          {{roll}}<span *ngIf="i < winningRolls.length - 1">,&nbsp;</span>
+          <span *ngIf="i == winningRolls.length - 1"> ]</span>
+        </p>
+      </h4>
+      <h4>|</h4>
+      <h4 style="color: red">
+        Losing Rolls:
+        <p *ngFor="let roll of losingRolls; let i = index"><span *ngIf="i == 0">[ </span>
+          {{roll}}<span *ngIf="i < losingRolls.length - 1">,&nbsp;</span>
+          <span *ngIf="i == losingRolls.length - 1"> ]</span></p>
+      </h4>
+    </div>
   </div>
 
   <!-- Game Info -->
@@ -79,7 +96,8 @@
       You are on Game: {{currentGame}}
     </h4>
     <!-- Roll two dice here -->
-    <div class="rollAction"
+    <div
+      class="rollAction"
       *ngIf="!winningRolls.includes(rollResult) && !losingRolls.includes(rollResult)"
     >
       <p>Roll The Dice</p>
@@ -97,23 +115,23 @@
   </div>
 
   <!-- Results Display -->
-  <div class="results" *ngIf="!diceRollSequence && !gameOver">
+  <div class="results" *ngIf="!gameOver">
     <hr />
-    <h4
+    <div
       *ngIf="!gameOver && diceRolls?.length > 0 && !winningRolls.includes(rollResult) && !losingRolls.includes(rollResult)"
     >
-      You rolled a {{dice1}} & {{dice2}} <br />
-      Take another go
-    </h4>
+      <h3>You rolled a {{dice1 + dice2}}</h3>
+      <h4>Take another go</h4>
+    </div>
     <div *ngIf="losingRolls.includes(rollResult)">
-      <h4>You rolled a {{dice1}} & {{dice2}}</h4>
+      <h4>You rolled a {{dice1 + dice2}}</h4>
       <h4>Sorry! You <span style="color: red">Lost</span></h4>
       <ng-container
         *ngIf="numberOfGames > currentGame; then nextGame"
       ></ng-container>
     </div>
     <div *ngIf="winningRolls.includes(rollResult)">
-      <h4>You rolled a {{dice1}} & {{dice2}}</h4>
+      <h4>You rolled a {{dice1 + dice2}}</h4>
       <h4>Congrats! You <span style="color: green">Won</span></h4>
       <ng-container
         *ngIf="numberOfGames > currentGame; then nextGame"
