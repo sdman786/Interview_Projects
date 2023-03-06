@@ -1,0 +1,187 @@
+<!-- Game -->
+<div class="gameContainer">
+  <div class="title">
+    <h2>
+      <mat-icon>casino</mat-icon> My Craps Game <mat-icon>casino</mat-icon>
+    </h2>
+  </div>
+
+  <!-- Game Info -->
+  <div class="infoText" *ngIf="numberOfGames == 0">
+    <p>
+      Select the number of games you want to play and click Enter to start the
+      game
+    </p>
+    <button
+      mat-icon-button
+      class="button"
+      color="primary"
+      (click)="showRules(rules)"
+    >
+      <mat-icon>help</mat-icon>
+    </button>
+  </div>
+
+  <!-- Rules Dialog -->
+  <ng-template #rules>
+    <div class="rulesDialog">
+      <h2 matDialogTitle>How to play Craps</h2>
+      <mat-dialog-content>
+        <p>Each game the "shooter" rolls two dice.</p>
+        <p>
+          If the numbers on the dice add up to <b>2, 3, or 12</b> the shooter
+          <span style="color: red"> loses</span>.
+        </p>
+        <p>
+          If the numbers on the dice add up to <b>7 or 11</b> the shooter
+          <span style="color: green"> wins</span>.
+        </p>
+        <p>
+          If the numbers on the dice add up to <b> 4, 5, 6, 8, 9, or 10</b> that
+          sets the "points", the shooter continues to roll until they either Win
+          or Lose
+        </p>
+      </mat-dialog-content>
+      <mat-dialog-actions>
+        <button mat-button matDialogClose color="primary">Dismiss</button>
+      </mat-dialog-actions>
+    </div>
+  </ng-template>
+
+  <!-- Game Input -->
+  <div *ngIf="numberOfGames == 0" class="userInput">
+    <form>
+      <mat-form-field class="numField">
+        <input
+          #NumberOfGames
+          matInput
+          type="number"
+          matInput
+          name="NumberOfGames"
+          value="0"
+        />
+      </mat-form-field>
+      <button
+        mat-icon-button
+        [disabled]="!NumberOfGames.value || NumberOfGames.value == '0' || NumberOfGames.value.includes('-')"
+        class="button"
+        color="primary"
+        (click)="startGame(NumberOfGames.value)"
+      >
+        <mat-icon>play_circle</mat-icon>
+      </button>
+    </form>
+  </div>
+
+  <!-- Game Play -->
+  <div *ngIf="numberOfGames > 0 && currentGame <= numberOfGames && !gameOver">
+    <h4 class="currentGame" *ngIf="numberOfGames > 1">
+      You are on Game: {{currentGame}}
+    </h4>
+    <!-- Roll two dice here -->
+    <div class="rollAction"
+      *ngIf="!winningRolls.includes(rollResult) && !losingRolls.includes(rollResult)"
+    >
+      <p>Roll The Dice</p>
+      <button
+        mat-fab
+        type="button"
+        title="Roll Dice"
+        value=""
+        color="primary"
+        (click)="rollDice()"
+      >
+        <mat-icon>casino</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Results Display -->
+  <div class="results" *ngIf="!diceRollSequence && !gameOver">
+    <hr />
+    <h4
+      *ngIf="!gameOver && diceRolls?.length > 0 && !winningRolls.includes(rollResult) && !losingRolls.includes(rollResult)"
+    >
+      You rolled a {{dice1}} & {{dice2}} <br />
+      Take another go
+    </h4>
+    <div *ngIf="losingRolls.includes(rollResult)">
+      <h4>You rolled a {{dice1}} & {{dice2}}</h4>
+      <h4>Sorry! You <span style="color: red">Lost</span></h4>
+      <ng-container
+        *ngIf="numberOfGames > currentGame; then nextGame"
+      ></ng-container>
+    </div>
+    <div *ngIf="winningRolls.includes(rollResult)">
+      <h4>You rolled a {{dice1}} & {{dice2}}</h4>
+      <h4>Congrats! You <span style="color: green">Won</span></h4>
+      <ng-container
+        *ngIf="numberOfGames > currentGame; then nextGame"
+      ></ng-container>
+    </div>
+    <!-- Start Next Game -->
+    <ng-template #nextGame>
+      <button
+        mat-flat-button
+        color="primary"
+        type="button"
+        (click)="startNextGame()"
+      >
+        Next Game
+      </button>
+    </ng-template>
+  </div>
+
+  <!-- Game Output -->
+  <div>
+    <!-- Show dice roll animation followed by result -->
+  </div>
+
+  <!-- Show when Game is over -->
+
+  <div *ngIf="gameOver && !showStats">
+    <h4>Game Over!</h4>
+    <!-- Show Stats Button -->
+    <button
+      mat-flat-button
+      color="primary"
+      type="button"
+      (click)="showStats = true"
+    >
+      Show Game Stats
+    </button>
+  </div>
+  <div *ngIf="showStats">
+    <h4>Game Stats:</h4>
+    <p>Average number rolls per game {{ gameResult?.averageRolls }}</p>
+    <p>The highest number of rolls {{gameResult?.highestRolls}}</p>
+    <p>The lowest number of rolls {{gameResult?.lowestRolls}}</p>
+    <p>The most common roll {{gameResult?.mostCommonRoll}}</p>
+    <p>The average winning percentage {{gameResult?.winningPercentage}}</p>
+    <p>The number of wins {{gameResult?.wins}}</p>
+    <p>The number of losses {{gameResult?.losses}}</p>
+    <br />
+    <!-- Start New Game -->
+    <button mat-flat-button color="primary" type="button" (click)="resetGame()">
+      Play Again
+    </button>
+  </div>
+</div>
+
+<!-- Craps
+Write a program to simulate a number of games of craps, the user should be able to
+type in how many games they want played. When finished tell the user:
+ The average number rolls per game
+ The highest number of rolls
+ The lowest number of rolls
+ The most common roll
+ The average winning percentage
+ The number of wins
+ The number of losses
+How to play craps
+Each game the "shooter" rolls two dice. If the numbers on the dice add up to 2, 3, or 12
+the shooter loses. If the numbers on the dice add up to 7 or 11 the shooter wins. If the
+numbers on the dice add up to 4, 5, 6, 8, 9, or 10 that sets the "points", the shooter
+continues to roll until the numbers match the points then the shooter wins, or if a 7 is
+rolled the shooter loses.
+ -->
